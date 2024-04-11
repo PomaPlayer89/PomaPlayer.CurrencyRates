@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PomaPlayer.CurrencyRates.Logic.DtoModels;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using PomaPlayer.CurrencyRates.Cron.DtoModels;
 using PomaPlayer.CurrencyRates.Logic.Interfaces.Repositories;
 using PomaPlayer.CurrencyRates.Storage.Database;
 using PomaPlayer.CurrencyRates.Storage.Models;
@@ -8,12 +9,14 @@ namespace PomaPlayer.CurrencyRates.Logic.Repositories;
 
 public sealed class Repository : IRepository
 {
-    public Repository()
-    {
+    private readonly IMapper _mapper;
 
+    public Repository(IMapper mapper)
+    {
+        _mapper = mapper;
     }
 
-    public async Task<IReadOnlyCollection<ReportDto>> GetReport(DataContext dataContext, DateOnly start, DateOnly end, CancellationToken cancellationToken = default)
+    public async Task<ReportDto[]> GetReportAsync(DataContext dataContext, DateOnly start, DateOnly end, CancellationToken cancellationToken = default)
     {
         return await dataContext.Set<ReportDaily>()
             .AsNoTracking()
@@ -29,14 +32,14 @@ public sealed class Repository : IRepository
             .ToArrayAsync(cancellationToken);
     }
 
-    public async Task SaveReports(DataContext dataContext, ReportDaily report, CancellationToken cancellationToken = default)
+    public async Task SaveReportsAsync(DataContext dataContext, ReportDailyDto report, CancellationToken cancellationToken = default)
     {
         if (!dataContext.Set<ReportDaily>().Any(x => x.Date == report.Date))
         {
-            //dataContext.Set<ReportDaily>()
-            //    .AddRange(report.Adapt<ReportDaily[]>());
-            //
-            await dataContext.SaveChangesAsync(cancellationToken);
+            var reportDaily = _mapper.Map<ReportDaily[]>(report.Reports);
+
+            dataContext.Set<ReportDaily>()
+                .AddRange(reportDaily);
         }
     }
 }

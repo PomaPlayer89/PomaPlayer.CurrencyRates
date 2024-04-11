@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Services\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PomaPlayer.CurrencyRates.Cron\PomaPlayer.CurrencyRates.Cron.csproj" />
     <ProjectReference Include="..\PomaPlayer.CurrencyRates.Storage\PomaPlayer.CurrencyRates.Storage.csproj" />
   </ItemGroup>
 
