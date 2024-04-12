@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.HttpLogging;
-using PomaPlayer.CurrencyRates.WebApi.Extensions;
-using PomaPlayer.CurrencyRates.WebApi.Middlewares;
+using PomaPlayer.CurrencyRates.Quartz.Extensioncs;
+using PomaPlayer.CurrencyRates.Quartz.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddWebServices(builder.Configuration);
+builder.Services.AddQuartzServices(builder.Configuration);
 
 builder.Services.AddHttpLogging(o => o = new HttpLoggingOptions());
 
@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CurrencyRates");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Quartz");
         options.RoutePrefix = string.Empty;
     });
 }

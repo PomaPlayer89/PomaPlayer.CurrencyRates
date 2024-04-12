@@ -7,25 +7,31 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PomaPlayer.CurrencyRates.WebApi.Features.Commands;
 
-public sealed class SaveReportsCommand : IRequest
+/// <summary>
+/// Запросить отчет за период
+/// </summary>
+public sealed class GenerateReportForPeriodCommand : IRequest
 {
+    /// <summary>
+    /// Данные для формирования отчета
+    /// </summary>
     [Required]
     [FromBody]
     public SaveReportsRequestDto Report { get; init; }
 }
 
-public sealed class SaveReportsCommandHandler : IRequestHandler<SaveReportsCommand>
+public sealed class GenerateReportForPeriodCommandHandler : IRequestHandler<GenerateReportForPeriodCommand>
 {
     private readonly DataContext _dataContext;
     private readonly ICronReportService _cronReportService;
 
-    public SaveReportsCommandHandler(DataContext dataContext, ICronReportService cronReportService)
+    public GenerateReportForPeriodCommandHandler(DataContext dataContext, ICronReportService cronReportService)
     {
         _dataContext = dataContext;
         _cronReportService = cronReportService;
     }
 
-    public async Task Handle(SaveReportsCommand request, CancellationToken cancellationToken)
+    public async Task Handle(GenerateReportForPeriodCommand request, CancellationToken cancellationToken)
     {
         await _cronReportService.SaveReportsAsync(_dataContext, request.Report.StartDate, request.Report.EndDate, cancellationToken);
         await _dataContext.SaveChangesAsync(cancellationToken);

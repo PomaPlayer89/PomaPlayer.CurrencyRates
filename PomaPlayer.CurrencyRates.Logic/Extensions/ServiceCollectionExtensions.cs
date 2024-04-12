@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
     public static void AddLogicServices(this IServiceCollection services)
     {
         services.AddCronServices();
+
         services.AddSingleton<IRepository, Repository>();
         services.AddSingleton<ICronReportService, CronReportService>();
     }
